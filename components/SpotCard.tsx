@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl'
 import type { Spot } from '@/lib/types'
 import { computeDeposit, computeMinNextBid, computeRemainingBalance } from '@/lib/bidding'
 import { placeBid } from '@/actions/bids'
+import { uploadSponsorLogo } from '@/actions/uploadLogo'
 
 const TRANSITION_MS = 200
 
@@ -16,10 +17,22 @@ export function SpotCard({ spot }: { spot: Spot }) {
   const [error, setError] = useState<string | null>(null)
   const [email, setEmail] = useState('')
   const [brandName, setBrandName] = useState('')
+  const [logoFile, setLogoFile] = useState<File | null>(null)
+  const [logoPreview, setLogoPreview] = useState<string | null>(null)
+  const [uploadingLogo, setUploadingLogo] = useState(false)
   const minNextBid = computeMinNextBid(spot.current_bid, spot.starting_price)
   const [amount, setAmount] = useState(minNextBid)
   const triggerRef = useRef<HTMLButtonElement>(null)
   const firstFieldRef = useRef<HTMLInputElement>(null)
+
+  function handleLogoChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0] ?? null
+    setLogoFile(file)
+    setLogoPreview((prev) => {
+      if (prev) URL.revokeObjectURL(prev)
+      return file ? URL.createObjectURL(file) : null
+    })
+  }
 
   const deposit = computeDeposit(amount)
   const remaining = computeRemainingBalance(amount, deposit)
@@ -32,9 +45,19 @@ export function SpotCard({ spot }: { spot: Spot }) {
     requestAnimationFrame(() => setOpen(true))
   }
 
+  useEffect(() => {
+    return () => {
+      if (logoPreview) URL.revokeObjectURL(logoPreview)
+    }
+  }, [logoPreview])
+
   function closeModal() {
     setOpen(false)
-    window.setTimeout(() => setMounted(false), TRANSITION_MS)
+    window.setTimeout(() => {
+      setMounted(false)
+      setLogoFile(null)
+      setLogoPreview(null)
+    }, TRANSITION_MS)
   }
 
   useEffect(() => {
@@ -55,11 +78,28 @@ export function SpotCard({ spot }: { spot: Spot }) {
     e.preventDefault()
     setSubmitting(true)
     setError(null)
+
+    let logoUrl: string | undefined
+    if (logoFile) {
+      setUploadingLogo(true)
+      const formData = new FormData()
+      formData.set('logo', logoFile)
+      const uploadResult = await uploadSponsorLogo(formData)
+      setUploadingLogo(false)
+      if ('error' in uploadResult) {
+        setSubmitting(false)
+        setError(uploadResult.error)
+        return
+      }
+      logoUrl = uploadResult.url
+    }
+
     const result = await placeBid({
       spotId: spot.id,
       sponsorEmail: email,
       brandName,
       amount,
+      logoUrl,
     })
     if ('checkoutUrl' in result) {
       window.location.href = result.checkoutUrl
@@ -187,12 +227,44 @@ export function SpotCard({ spot }: { spot: Spot }) {
                     className="w-full rounded border border-border px-3 py-2 text-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground"
                   />
 
+                  <div>
+                    <label
+                      htmlFor={`logo-${spot.id}`}
+                      className="text-xs font-medium text-muted"
+                    >
+                      {t('logoLabel')}
+                    </label>
+                    <div className="mt-1 flex items-center gap-3">
+                      <div className="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-lg border border-dashed border-border bg-gray-50">
+                        {logoPreview ? (
+                          // eslint-disable-next-line @next/next/no-img-element
+                          <img
+                            src={logoPreview}
+                            alt=""
+                            className="h-full w-full object-cover"
+                          />
+                        ) : (
+                          <span className="text-lg text-muted">+</span>
+                        )}
+                      </div>
+                      <input
+                        id={`logo-${spot.id}`}
+                        type="file"
+                        accept="image/*"
+                        onChange={handleLogoChange}
+                        className="flex-1 text-xs text-muted file:mr-2 file:rounded-full file:border file:border-border file:bg-background file:px-3 file:py-1.5 file:text-xs file:font-medium file:transition-colors file:duration-200 file:cursor-pointer hover:file:bg-gray-50"
+                      />
+                    </div>
+                  </div>
+
                   <button
                     type="submit"
                     disabled={submitting}
                     className="w-full cursor-pointer rounded-full bg-foreground px-4 py-2.5 text-sm font-medium text-background transition-opacity duration-200 disabled:cursor-not-allowed disabled:opacity-50"
                   >
-                    {t('submitBid', { amount: `$${amount}` })}
+                    {uploadingLogo
+                      ? t('logoUploading')
+                      : t('submitBid', { amount: `$${amount}` })}
                   </button>
 
                   {error && (

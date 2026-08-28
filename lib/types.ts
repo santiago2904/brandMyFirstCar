@@ -8,6 +8,10 @@ export interface Spot {
   starting_price: number
   current_bid: number | null
   current_leader_sponsor_id: string | null
+  // Joined via `current_leader:sponsors(...)` in the spots query — null when
+  // no bid has been placed yet, or absent on realtime UPDATE payloads (those
+  // carry only the changed columns, so callers refetch the row to get this).
+  current_leader?: { logo_url: string | null; brand_name: string } | null
 }
 
 export interface Bid {

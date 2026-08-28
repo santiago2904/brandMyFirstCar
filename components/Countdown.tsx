@@ -20,9 +20,15 @@ export function Countdown({ endDate }: { endDate: string }) {
   const [time, setTime] = useState<ReturnType<typeof remaining> | null>(null)
 
   useEffect(() => {
-    setTime(remaining(endDate))
-    const id = setInterval(() => setTime(remaining(endDate)), 1000)
-    return () => clearInterval(id)
+    // Deferred via setTimeout(0) rather than called synchronously in the
+    // effect body, per react-hooks/set-state-in-effect.
+    const tick = () => setTime(remaining(endDate))
+    const firstTick = window.setTimeout(tick, 0)
+    const id = window.setInterval(tick, 1000)
+    return () => {
+      window.clearTimeout(firstTick)
+      window.clearInterval(id)
+    }
   }, [endDate])
 
   return (

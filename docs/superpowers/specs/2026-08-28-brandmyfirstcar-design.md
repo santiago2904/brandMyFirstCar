@@ -92,11 +92,18 @@ mostrada en el hero: $12,000 USD.
    vía Supabase Realtime Presence — efímero, no persistido).
 2. Hero: foto del carro + historia corta ("por qué este carro importa") + barra de
    progreso de financiamiento ($ ofertado hasta ahora / meta de $12,000 USD).
-3. Selector de zonas con puja en vivo por spot (estado: disponible / liderando / outbid).
-4. "Cómo funciona" (3 pasos, patrón BrandMyMac).
-5. FAQ (pagos, qué pasa si te superan, aprobación de marca, por qué Lemon Squeezy).
-6. Muro de sponsors aprobados.
-7. Countdown a fin de subasta.
+3. Modelo 3D del carro (Three.js/react-three-fiber, procedural — sin asset externo),
+   con badges HTML anclados por zona: muestran el logo del sponsor líder si existe, o
+   el precio actual. Solo vista/rotación (drag), no es una segunda vía para pujar —
+   pujar sigue siendo a través de la tabla.
+4. Selector de zonas con puja en vivo por spot (estado: disponible / liderando / outbid),
+   modal animado (fade+scale) con desglose de depósito y upload opcional de logo
+   (Supabase Storage, bucket público `sponsor-logos`, subido vía server action con
+   service role — sin políticas RLS de escritura pública necesarias).
+5. "Cómo funciona" (3 pasos, patrón BrandMyMac).
+6. FAQ (pagos, qué pasa si te superan, aprobación de marca, por qué Lemon Squeezy).
+7. Muro de sponsors aprobados.
+8. Countdown a fin de subasta.
 
 ## 7. Testing
 
@@ -114,3 +121,14 @@ UI y páginas estáticas sin cobertura de test dedicada.
   API antes de implementar el flujo de refund automático.
 - Aprobación manual de sponsors es un paso humano — si el volumen crece, se vuelve
   cuello de botella (aceptable para v1).
+- El modelo 3D del carro es genérico/procedural (cajas y cilindros), no el carro real —
+  las posiciones de zona son coordenadas aproximadas a ojo. Reemplazar por un modelo
+  real (o al menos texturizado con fotos) antes de que importe la fidelidad visual.
+- **Gap de seguridad pendiente, no introducido hoy pero notado en este cambio**: las
+  tablas `spots`, `bids`, `sponsors`, `campaign` no tienen Row Level Security
+  habilitada — el anon key del cliente puede leer (y en teoría escribir) esas tablas
+  directamente vía la API REST de Supabase, sin pasar por `placeBid`. Las escrituras
+  reales del sitio sí van todas por server actions con service role, pero nada del
+  lado de la base de datos impide que alguien más escriba directo. Aceptable para un
+  MVP de bajo volumen; agregar políticas RLS (o al menos revocar INSERT/UPDATE para
+  el rol `anon`) antes de un lanzamiento con tráfico real.

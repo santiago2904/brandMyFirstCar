@@ -65,6 +65,9 @@
     "depositLabel": "Deposit (20%)",
     "dueNow": "Due now",
     "depositExplain": "Refunded in full if you're outbid. If you win, the {remaining} remainder is charged to the same card when the auction closes.",
-    "submitBid": "Confirm bid of {amount}"
+    "submitBid": "Confirm bid of {amount}",
+    "carHint": "Drag to rotate · generic 3D model, swapped for the real car later",
+    "logoLabel": "Logo (optional)",
+    "logoUploading": "Uploading logo…"
   }
 }

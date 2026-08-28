@@ -15,7 +15,10 @@ export default async function Page() {
 
   const [{ data: spots }, { data: sponsors }, { data: campaign }, { data: totalVisits }] =
     await Promise.all([
-      supabase.from('spots').select('*').order('starting_price', { ascending: false }),
+      supabase
+        .from('spots')
+        .select('*, current_leader:sponsors(logo_url, brand_name)')
+        .order('starting_price', { ascending: false }),
       supabase.from('sponsors').select('*').eq('approved', true),
       supabase.from('campaign').select('*').eq('id', 1).single(),
       supabase.rpc('increment_visits'),

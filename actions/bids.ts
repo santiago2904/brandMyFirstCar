@@ -11,6 +11,7 @@ export async function placeBid(input: {
   sponsorEmail: string
   brandName: string
   amount: number
+  logoUrl?: string
 }): Promise<{ checkoutUrl: string } | { error: string }> {
   const supabase = createServerClient()
 
@@ -47,11 +48,16 @@ export async function placeBid(input: {
     }
   }
 
-  // Upsert the sponsor.
+  // Upsert the sponsor. logo_url is only included (and so only overwritten)
+  // when this bid actually supplied one.
   const { data: sponsor, error: sponsorError } = await supabase
     .from('sponsors')
     .upsert(
-      { email: input.sponsorEmail, brand_name: input.brandName },
+      {
+        email: input.sponsorEmail,
+        brand_name: input.brandName,
+        ...(input.logoUrl ? { logo_url: input.logoUrl } : {}),
+      },
       { onConflict: 'email' }
     )
     .select()
