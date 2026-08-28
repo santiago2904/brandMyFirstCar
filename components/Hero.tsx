@@ -9,10 +9,7 @@ export function Hero({ spots }: { spots: Spot[] }) {
 
   return (
     <section className="px-6 py-20 text-center">
-      <span className="inline-block rounded-full border border-border px-3 py-1 text-xs font-medium text-muted">
-        {t('eyebrow')}
-      </span>
-      <h1 className="mt-6 text-5xl font-bold tracking-tight sm:text-6xl">{t('title')}</h1>
+      <h1 className="text-5xl font-bold tracking-tight sm:text-6xl">{t('title')}</h1>
       <p className="mx-auto mt-4 max-w-xl text-lg text-muted">{t('subtitle')}</p>
 
       <div className="mx-auto mt-10 max-w-sm">
