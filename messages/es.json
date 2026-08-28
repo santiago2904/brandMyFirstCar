@@ -1,0 +1,47 @@
+{
+  "hero": {
+    "title": "Tu marca, en mi primer carro.",
+    "subtitle": "Tu logo viaja conmigo durante 6 meses. Elegí tu espacio, hacé tu oferta."
+  },
+  "howItWorks": {
+    "title": "Cómo funciona",
+    "step1Title": "Elegí tu zona y tamaño",
+    "step1Body": "Seis zonas del carro, precios según visibilidad.",
+    "step2Title": "Ganá la puja",
+    "step2Body": "La oferta más alta al cierre de la semana gana. Te contacto para el saldo.",
+    "step3Title": "Tu logo viaja",
+    "step3Body": "Imprimo tu logo como sticker de vinilo y tu marca viaja conmigo 6 meses."
+  },
+  "benefits": {
+    "title": "Qué más te llevás",
+    "devTitle": "Trabajo de software",
+    "devBody": "Soy desarrollador de software. Parte de lo que aportás se traduce en trabajo para tu marca: una web, una app, una automatización o un bot, a definir según el monto.",
+    "contentTitle": "Contenido en redes",
+    "contentBody": "Voy a grabar mucho contenido del carro para redes — tu marca aparece brandeada de forma orgánica en ese contenido.",
+    "callTitle": "Videollamada del carro",
+    "callBody": "Cuando tenga el carro, te muestro tu sticker en vivo por FaceTime si querés verlo."
+  },
+  "faq": {
+    "title": "Preguntas frecuentes",
+    "paymentQ": "¿Cómo funciona el pago?",
+    "paymentA": "Al pujar se cobra un depósito del 20% (mínimo el equivalente a €10). Si te superan, se reembolsa automático. Si ganás, cuenta para el total y te mando el link del saldo.",
+    "outbidQ": "¿Qué pasa si me superan?",
+    "outbidA": "Recibís el reembolso completo y podés volver a pujar. La nueva oferta debe superar la actual por al menos €10.",
+    "approvalQ": "¿Cualquier marca puede participar?",
+    "approvalA": "Reviso cada sponsor a mano antes de que aparezca. Si tu oferta no se aprueba, el depósito se devuelve completo."
+  },
+  "sponsorWall": {
+    "title": "Las marcas que vienen conmigo",
+    "empty": "Tu marca podría estar acá"
+  },
+  "countdown": {
+    "endsIn": "La subasta termina en"
+  },
+  "spot": {
+    "currentBid": "Oferta actual",
+    "startingAt": "Desde",
+    "bidButton": "Ofertar",
+    "leading": "Liderando",
+    "outbid": "Superado"
+  }
+}

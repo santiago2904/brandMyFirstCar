@@ -1,0 +1,47 @@
+{
+  "hero": {
+    "title": "Your brand, on my first car.",
+    "subtitle": "Your logo rides with me for 6 months. Pick your spot, place your bid."
+  },
+  "howItWorks": {
+    "title": "How it works",
+    "step1Title": "Pick your spot and size",
+    "step1Body": "Six zones on the car, priced by visibility.",
+    "step2Title": "Win the bid",
+    "step2Body": "The top bid at week's end wins. I'll reach out to arrange the balance.",
+    "step3Title": "Your logo rides along",
+    "step3Body": "I print your logo as a vinyl sticker and your brand travels with me for 6 months."
+  },
+  "benefits": {
+    "title": "What else you get",
+    "devTitle": "Software work",
+    "devBody": "I'm a software developer. Part of what you contribute translates into work for your brand: a website, an app, an automation, or a bot, scoped to the amount.",
+    "contentTitle": "Social content",
+    "contentBody": "I'll be filming a lot of car content for social — your brand shows up branded, organically, in that content.",
+    "callTitle": "Car video call",
+    "callBody": "Once I have the car, I'll show you your sticker live over FaceTime if you'd like to see it."
+  },
+  "faq": {
+    "title": "Questions & Answers",
+    "paymentQ": "How does payment work?",
+    "paymentA": "Bidding takes a 20% deposit (minimum equivalent to €10). If you're outbid, it's refunded automatically. If you win, it counts toward the total and I send a payment link for the remainder.",
+    "outbidQ": "What if someone outbids me?",
+    "outbidA": "You get a full refund and the chance to swing back. A new bid must beat the current one by at least €10.",
+    "approvalQ": "Can any brand join?",
+    "approvalA": "I approve every sponsor by hand before it appears. If your bid is refused, your deposit comes back in full."
+  },
+  "sponsorWall": {
+    "title": "The brands coming along",
+    "empty": "Your brand could be here"
+  },
+  "countdown": {
+    "endsIn": "Auction ends in"
+  },
+  "spot": {
+    "currentBid": "Current bid",
+    "startingAt": "Starting at",
+    "bidButton": "Place bid",
+    "leading": "Leading",
+    "outbid": "Outbid"
+  }
+}
