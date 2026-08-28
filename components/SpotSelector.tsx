@@ -10,7 +10,7 @@ import { SpotCard } from './SpotCard'
 // The 3D scene touches WebGL/window on load — never render it on the server.
 const CarScene = dynamic(() => import('./CarScene').then((m) => m.CarScene), {
   ssr: false,
-  loading: () => <div className="h-64 w-full sm:h-80" />,
+  loading: () => <div className="h-[26rem] w-full sm:h-[32rem]" />,
 })
 
 export function SpotSelector({ initialSpots }: { initialSpots: Spot[] }) {
@@ -47,7 +47,36 @@ export function SpotSelector({ initialSpots }: { initialSpots: Spot[] }) {
   return (
     <section id="spots" className="mx-auto max-w-3xl px-6 py-16">
       <CarScene spots={spots} />
-      <p className="mb-8 mt-2 text-center text-xs text-muted">{t('carHint')}</p>
+      <p className="mt-2 text-center text-xs text-muted">{t('carHint')}</p>
+      <p className="mb-8 text-center text-[11px] text-muted">
+        &ldquo;Mazda-3&rdquo; by{' '}
+        <a
+          href="https://sketchfab.com/David_Holiday"
+          target="_blank"
+          rel="noreferrer noopener"
+          className="underline"
+        >
+          David_Holiday
+        </a>{' '}
+        (
+        <a
+          href="https://sketchfab.com/3d-models/mazda-3-0811f0d3785243a5ad05bd1b84457273"
+          target="_blank"
+          rel="noreferrer noopener"
+          className="underline"
+        >
+          Sketchfab
+        </a>
+        ), licensed{' '}
+        <a
+          href="http://creativecommons.org/licenses/by/4.0/"
+          target="_blank"
+          rel="noreferrer noopener"
+          className="underline"
+        >
+          CC BY 4.0
+        </a>
+      </p>
       <div className="overflow-x-auto">
         <table className="w-full min-w-[480px] text-left">
           <thead>

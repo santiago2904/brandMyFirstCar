@@ -66,7 +66,7 @@
     "dueNow": "Due now",
     "depositExplain": "Refunded in full if you're outbid. If you win, the {remaining} remainder is charged to the same card when the auction closes.",
     "submitBid": "Confirm bid of {amount}",
-    "carHint": "Drag to rotate · generic 3D model, swapped for the real car later",
+    "carHint": "Drag to rotate · reference 3D model (Mazda 3), not the exact car",
     "logoLabel": "Logo (optional)",
     "logoUploading": "Uploading logo…"
   }

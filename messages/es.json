@@ -66,7 +66,7 @@
     "dueNow": "A pagar ahora",
     "depositExplain": "Se reembolsa completo si te superan. Si ganás, se cobra el saldo de {remaining} a la misma tarjeta al cerrar la subasta.",
     "submitBid": "Confirmar oferta de {amount}",
-    "carHint": "Arrastrá para rotar · modelo 3D genérico, se reemplaza por el carro real más adelante",
+    "carHint": "Arrastrá para rotar · modelo 3D de referencia (Mazda 3), no el carro exacto",
     "logoLabel": "Logo (opcional)",
     "logoUploading": "Subiendo logo…"
   }

@@ -1,51 +1,69 @@
 'use client'
 
+import { Suspense, useMemo } from 'react'
+import * as THREE from 'three'
 import { Canvas } from '@react-three/fiber'
-import { OrbitControls, Html } from '@react-three/drei'
+import { OrbitControls, Html, useGLTF } from '@react-three/drei'
 import type { Spot } from '@/lib/types'
 
-// Approximate anchor points for each zone on the procedural car body below.
-// Placeholder positions — swap for real coordinates once the car has actual
-// photos/measurements.
-const ZONE_POSITIONS: Record<string, [number, number, number]> = {
-  Capó: [0, 0.75, 1.5],
-  'Puerta izquierda': [-1.02, 0.5, 0],
-  'Puerta derecha': [1.02, 0.5, 0],
-  Baúl: [0, 0.75, -1.7],
-  'Parachoques trasero': [0, 0.25, -2.15],
-  Espejos: [-1.08, 0.75, 0.9],
+const MODEL_URL = '/models/mazda-3.glb'
+const TARGET_LENGTH = 4.2 // meters — normalizes whatever units the source file uses
+
+// Zone anchors as fractions of the normalized model: x/z are fractions of
+// half-width/half-length (0 = center, ±1 = edge), y is a fraction of TOTAL
+// height (0 = ground, 1 = roof). Eyeballed against the rendered model, not
+// measured from real part positions — adjust here if a badge lands wrong.
+const ZONE_FRACTIONS: Record<string, [number, number, number]> = {
+  Capó: [0, 0.32, 0.65],
+  'Puerta izquierda': [-1.0, 0.25, 0],
+  'Puerta derecha': [1.0, 0.25, 0],
+  Baúl: [0, 0.35, -0.65],
+  'Parachoques trasero': [0, 0.08, -0.92],
+  Espejos: [-1.0, 0.55, 0.35],
 }
 
-const WHEEL_POSITIONS: [number, number, number][] = [
-  [-0.9, 0, 1.3],
-  [0.9, 0, 1.3],
-  [-0.9, 0, -1.3],
-  [0.9, 0, -1.3],
-]
+function useNormalizedModel() {
+  const { scene } = useGLTF(MODEL_URL)
 
-function CarBody() {
-  return (
-    <group>
-      <mesh position={[0, 0.35, 0]}>
-        <boxGeometry args={[2, 0.5, 4]} />
-        <meshStandardMaterial color="#e5e7eb" />
-      </mesh>
-      <mesh position={[0, 0.85, -0.15]}>
-        <boxGeometry args={[1.7, 0.5, 2]} />
-        <meshStandardMaterial color="#f3f4f6" />
-      </mesh>
-      {WHEEL_POSITIONS.map((position, i) => (
-        <mesh key={i} position={position} rotation={[Math.PI / 2, 0, 0]}>
-          <cylinderGeometry args={[0.35, 0.35, 0.25, 20]} />
-          <meshStandardMaterial color="#111111" />
-        </mesh>
-      ))}
-    </group>
-  )
+  // Pure derivation: clone once per loaded scene, scale/re-center the clone
+  // (a fresh object nothing else references yet), and measure it. Memoized
+  // so this only re-runs if the loaded GLTF scene itself changes.
+  return useMemo(() => {
+    const object = scene.clone()
+
+    const rawBox = new THREE.Box3().setFromObject(object)
+    const rawSize = new THREE.Vector3()
+    rawBox.getSize(rawSize)
+    const scale = TARGET_LENGTH / Math.max(rawSize.x, rawSize.z, 0.0001)
+    object.scale.setScalar(scale)
+
+    const scaledBox = new THREE.Box3().setFromObject(object)
+    const center = new THREE.Vector3()
+    scaledBox.getCenter(center)
+    object.position.set(-center.x, -scaledBox.min.y, -center.z)
+
+    const finalBox = new THREE.Box3().setFromObject(object)
+    const halfExtents = finalBox.getSize(new THREE.Vector3()).multiplyScalar(0.5)
+
+    return { object, halfExtents }
+  }, [scene])
 }
 
-function ZoneBadge({ spot }: { spot: Spot }) {
-  const position = ZONE_POSITIONS[spot.zone_name] ?? [0, 1, 0]
+useGLTF.preload(MODEL_URL)
+
+function ZoneBadge({
+  spot,
+  halfExtents,
+}: {
+  spot: Spot
+  halfExtents: THREE.Vector3
+}) {
+  const [fx, fy, fz] = ZONE_FRACTIONS[spot.zone_name] ?? [0, 0.5, 0]
+  const position: [number, number, number] = [
+    fx * halfExtents.x,
+    fy * halfExtents.y * 2, // fy is a fraction of total height (ground to roof)
+    fz * halfExtents.z,
+  ]
   const logoUrl = spot.current_leader?.logo_url
 
   return (
@@ -68,21 +86,35 @@ function ZoneBadge({ spot }: { spot: Spot }) {
   )
 }
 
+function CarModel({ spots }: { spots: Spot[] }) {
+  const { object, halfExtents } = useNormalizedModel()
+
+  return (
+    <>
+      <primitive object={object} />
+      {spots.map((spot) => (
+        <ZoneBadge key={spot.id} spot={spot} halfExtents={halfExtents} />
+      ))}
+    </>
+  )
+}
+
 export function CarScene({ spots }: { spots: Spot[] }) {
   return (
-    <div className="h-64 w-full sm:h-80">
-      <Canvas camera={{ position: [4, 2.4, 5], fov: 40 }}>
-        <ambientLight intensity={0.8} />
-        <directionalLight position={[5, 6, 5]} intensity={0.9} />
-        <CarBody />
-        {spots.map((spot) => (
-          <ZoneBadge key={spot.id} spot={spot} />
-        ))}
+    <div className="h-[26rem] w-full sm:h-[32rem]">
+      <Canvas camera={{ position: [3.4, 1.7, 4], fov: 35 }}>
+        <ambientLight intensity={0.9} />
+        <directionalLight position={[5, 6, 5]} intensity={1} />
+        <directionalLight position={[-5, 3, -5]} intensity={0.4} />
+        <Suspense fallback={null}>
+          <CarModel spots={spots} />
+        </Suspense>
         <OrbitControls
           enableZoom={false}
           enablePan={false}
           minPolarAngle={Math.PI / 3}
           maxPolarAngle={Math.PI / 2.1}
+          target={[0, 0.6, 0]}
         />
       </Canvas>
     </div>
