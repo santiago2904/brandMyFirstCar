@@ -1,7 +1,16 @@
 {
+  "nav": {
+    "brand": "brandMyFirstCar",
+    "spots": "Subasta en vivo",
+    "howItWorks": "Cómo funciona",
+    "faq": "FAQ",
+    "cta": "Elegí tu espacio"
+  },
   "hero": {
+    "eyebrow": "Subasta en vivo · 1 semana",
     "title": "Tu marca, en mi primer carro.",
-    "subtitle": "Tu logo viaja conmigo durante 6 meses. Elegí tu espacio, hacé tu oferta."
+    "subtitle": "Tu logo viaja conmigo durante 6 meses. Elegí tu espacio, hacé tu oferta.",
+    "spotsClaimed": "espacios con ofertas"
   },
   "howItWorks": {
     "title": "Cómo funciona",
@@ -38,10 +47,14 @@
     "endsIn": "La subasta termina en"
   },
   "spot": {
+    "zone": "Zona",
+    "size": "Tamaño",
     "currentBid": "Oferta actual",
     "startingAt": "Desde",
     "bidButton": "Ofertar",
-    "leading": "Liderando",
-    "outbid": "Superado"
+    "cancel": "Cancelar",
+    "brandNamePlaceholder": "Nombre de tu marca",
+    "emailPlaceholder": "Email",
+    "submitBid": "Confirmar oferta"
   }
 }

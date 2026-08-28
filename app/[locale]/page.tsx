@@ -1,4 +1,5 @@
 import { createServerClient } from '@/lib/supabase/server'
+import { Nav } from '@/components/Nav'
 import { Hero } from '@/components/Hero'
 import { Countdown } from '@/components/Countdown'
 import { SpotSelector } from '@/components/SpotSelector'
@@ -17,11 +18,16 @@ export default async function Page() {
     supabase.from('campaign').select('*').eq('id', 1).single(),
   ])
 
+  const typedSpots = (spots as Spot[]) ?? []
+
   return (
     <main>
-      <Hero />
-      {campaign && <Countdown endDate={(campaign as Campaign).end_date} />}
-      <SpotSelector initialSpots={(spots as Spot[]) ?? []} />
+      <Nav />
+      <div className="text-center pt-8">
+        {campaign && <Countdown endDate={(campaign as Campaign).end_date} />}
+      </div>
+      <Hero spots={typedSpots} />
+      <SpotSelector initialSpots={typedSpots} />
       <HowItWorks />
       <Benefits />
       <Faq />

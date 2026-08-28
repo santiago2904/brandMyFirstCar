@@ -1,7 +1,16 @@
 {
+  "nav": {
+    "brand": "brandMyFirstCar",
+    "spots": "Live auction",
+    "howItWorks": "How it works",
+    "faq": "FAQ",
+    "cta": "Pick your spot"
+  },
   "hero": {
+    "eyebrow": "Live auction · 1 week",
     "title": "Your brand, on my first car.",
-    "subtitle": "Your logo rides with me for 6 months. Pick your spot, place your bid."
+    "subtitle": "Your logo rides with me for 6 months. Pick your spot, place your bid.",
+    "spotsClaimed": "spots with bids"
   },
   "howItWorks": {
     "title": "How it works",
@@ -38,10 +47,14 @@
     "endsIn": "Auction ends in"
   },
   "spot": {
+    "zone": "Zone",
+    "size": "Size",
     "currentBid": "Current bid",
     "startingAt": "Starting at",
     "bidButton": "Place bid",
-    "leading": "Leading",
-    "outbid": "Outbid"
+    "cancel": "Cancel",
+    "brandNamePlaceholder": "Your brand name",
+    "emailPlaceholder": "Email",
+    "submitBid": "Confirm bid"
   }
 }

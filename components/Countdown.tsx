@@ -22,11 +22,12 @@ export function Countdown({ endDate }: { endDate: string }) {
   }, [endDate])
 
   return (
-    <div className="text-center">
-      <p className="text-sm uppercase text-gray-500">{t('endsIn')}</p>
-      <p className="text-2xl font-mono">
+    <div className="mx-auto mb-2 inline-flex items-center gap-2 rounded-full border border-border px-4 py-1.5 text-sm">
+      <span className="h-1.5 w-1.5 rounded-full bg-accent" />
+      <span className="text-muted">{t('endsIn')}</span>
+      <span className="font-mono font-medium tabular-nums">
         {time.days}d {time.hours}h {time.minutes}m {time.seconds}s
-      </p>
+      </span>
     </div>
   )
 }

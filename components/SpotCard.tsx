@@ -8,6 +8,7 @@ import { placeBid } from '@/actions/bids'
 
 export function SpotCard({ spot }: { spot: Spot }) {
   const t = useTranslations('spot')
+  const [expanded, setExpanded] = useState(false)
   const [submitting, setSubmitting] = useState(false)
   const [email, setEmail] = useState('')
   const [brandName, setBrandName] = useState('')
@@ -32,45 +33,68 @@ export function SpotCard({ spot }: { spot: Spot }) {
   }
 
   return (
-    <div className="rounded-lg border p-4">
-      <h3 className="font-semibold">{spot.zone_name}</h3>
-      <p className="text-sm text-gray-500">{spot.size}</p>
-      <p className="mt-2">
-        {spot.current_bid ? t('currentBid') : t('startingAt')}:{' '}
-        <strong>€{spot.current_bid ?? spot.starting_price}</strong>
-      </p>
-      <form onSubmit={handleSubmit} className="mt-3 space-y-2">
-        <input
-          type="text"
-          placeholder="Brand name"
-          required
-          value={brandName}
-          onChange={(e) => setBrandName(e.target.value)}
-          className="w-full rounded border px-2 py-1"
-        />
-        <input
-          type="email"
-          placeholder="Email"
-          required
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          className="w-full rounded border px-2 py-1"
-        />
-        <input
-          type="number"
-          min={minNextBid}
-          value={amount}
-          onChange={(e) => setAmount(Number(e.target.value))}
-          className="w-full rounded border px-2 py-1"
-        />
-        <button
-          type="submit"
-          disabled={submitting}
-          className="w-full rounded bg-black py-2 text-white disabled:opacity-50"
-        >
-          {t('bidButton')}
-        </button>
-      </form>
-    </div>
+    <>
+      <tr className="border-b border-border last:border-0">
+        <td className="py-4 pr-4">
+          <div className="font-medium">{spot.zone_name}</div>
+          <div className="text-sm text-muted">{spot.size}</div>
+        </td>
+        <td className="py-4 pr-4 tabular-nums">
+          <span className="text-xs text-muted">
+            {spot.current_bid ? t('currentBid') : t('startingAt')}
+          </span>
+          <div className="font-medium">€{spot.current_bid ?? spot.starting_price}</div>
+        </td>
+        <td className="py-4 text-right">
+          <button
+            onClick={() => setExpanded((v) => !v)}
+            className="rounded-full border border-foreground px-4 py-2 text-sm font-medium hover:bg-foreground hover:text-background"
+          >
+            {expanded ? t('cancel') : t('bidButton')}
+          </button>
+        </td>
+      </tr>
+      {expanded && (
+        <tr className="border-b border-border last:border-0">
+          <td colSpan={3} className="pb-4">
+            <form
+              onSubmit={handleSubmit}
+              className="flex flex-col gap-2 rounded-lg bg-background/50 p-4 sm:flex-row sm:items-center"
+            >
+              <input
+                type="text"
+                placeholder={t('brandNamePlaceholder')}
+                required
+                value={brandName}
+                onChange={(e) => setBrandName(e.target.value)}
+                className="flex-1 rounded border border-border px-3 py-2 text-sm"
+              />
+              <input
+                type="email"
+                placeholder={t('emailPlaceholder')}
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="flex-1 rounded border border-border px-3 py-2 text-sm"
+              />
+              <input
+                type="number"
+                min={minNextBid}
+                value={amount}
+                onChange={(e) => setAmount(Number(e.target.value))}
+                className="w-28 rounded border border-border px-3 py-2 text-sm tabular-nums"
+              />
+              <button
+                type="submit"
+                disabled={submitting}
+                className="rounded-full bg-foreground px-4 py-2 text-sm font-medium text-background disabled:opacity-50"
+              >
+                {t('submitBid')}
+              </button>
+            </form>
+          </td>
+        </tr>
+      )}
+    </>
   )
 }

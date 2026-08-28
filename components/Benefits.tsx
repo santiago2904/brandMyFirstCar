@@ -8,15 +8,17 @@ export function Benefits() {
     { title: t('callTitle'), body: t('callBody') },
   ]
   return (
-    <section className="px-6 py-12">
-      <h2 className="text-2xl font-bold">{t('title')}</h2>
-      <div className="mt-6 grid gap-6 sm:grid-cols-3">
-        {items.map((item, i) => (
-          <div key={i} className="rounded-lg border p-4">
-            <h3 className="font-semibold">{item.title}</h3>
-            <p className="text-sm text-gray-600">{item.body}</p>
-          </div>
-        ))}
+    <section className="border-t border-border bg-gray-50 px-6 py-16">
+      <div className="mx-auto max-w-3xl">
+        <h2 className="text-2xl font-bold tracking-tight">{t('title')}</h2>
+        <div className="mt-8 grid gap-4 sm:grid-cols-3">
+          {items.map((item, i) => (
+            <div key={i} className="rounded-xl border border-border bg-background p-5">
+              <h3 className="font-semibold">{item.title}</h3>
+              <p className="mt-1 text-sm text-muted">{item.body}</p>
+            </div>
+          ))}
+        </div>
       </div>
     </section>
   )
