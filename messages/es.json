@@ -16,6 +16,11 @@
     "viewingNow": "personas viendo esta página ahora",
     "totalVisits": "visitas totales"
   },
+  "confirmation": {
+    "title": "¡Listo! Tu oferta quedó confirmada.",
+    "body": "Te escribo por email si te superan o cuando termine la subasta. Gracias por sumarte.",
+    "dismiss": "Cerrar"
+  },
   "howItWorks": {
     "title": "Cómo funciona",
     "step1Title": "Elegí tu zona y tamaño",
@@ -53,6 +58,8 @@
   "spot": {
     "zone": "Zona",
     "size": "Tamaño",
+    "heldBy": "Líder",
+    "bidCount": "{count, plural, one {# oferta} other {# ofertas}}",
     "currentBid": "Oferta actual",
     "startingAt": "Desde",
     "bidButton": "Ofertar",

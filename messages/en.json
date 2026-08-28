@@ -16,6 +16,11 @@
     "viewingNow": "people viewing this page now",
     "totalVisits": "total visits"
   },
+  "confirmation": {
+    "title": "You're in! Your bid is confirmed.",
+    "body": "I'll email you if you're outbid or when the auction ends. Thanks for joining.",
+    "dismiss": "Dismiss"
+  },
   "howItWorks": {
     "title": "How it works",
     "step1Title": "Pick your spot and size",
@@ -53,6 +58,8 @@
   "spot": {
     "zone": "Zone",
     "size": "Size",
+    "heldBy": "Leading",
+    "bidCount": "{count, plural, one {# bid} other {# bids}}",
     "currentBid": "Current bid",
     "startingAt": "Starting at",
     "bidButton": "Place bid",

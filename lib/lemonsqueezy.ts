@@ -15,6 +15,7 @@ export async function createCheckoutUrl(params: {
   amountCents: number
   email: string
   custom: Record<string, string>
+  redirectUrl?: string
 }): Promise<string> {
   const res = await fetch(`${API_BASE}/checkouts`, {
     method: 'POST',
@@ -28,7 +29,9 @@ export async function createCheckoutUrl(params: {
             custom: params.custom,
           },
           checkout_options: { embed: false },
-          product_options: {},
+          product_options: params.redirectUrl
+            ? { redirect_url: params.redirectUrl }
+            : {},
           preview: false,
           custom_price: params.amountCents,
         },

@@ -78,10 +78,11 @@ export function SpotSelector({ initialSpots }: { initialSpots: Spot[] }) {
         </a>
       </p>
       <div className="overflow-x-auto">
-        <table className="w-full min-w-[480px] text-left">
+        <table className="w-full min-w-[600px] text-left">
           <thead>
             <tr className="border-b border-border text-xs uppercase tracking-wide text-muted">
               <th className="pb-3 font-medium">{t('zone')}</th>
+              <th className="pb-3 font-medium">{t('heldBy')}</th>
               <th className="pb-3 font-medium">{t('currentBid')}</th>
               <th className="pb-3" />
             </tr>

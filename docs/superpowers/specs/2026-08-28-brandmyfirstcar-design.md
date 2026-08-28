@@ -54,7 +54,7 @@ en fotos/redes del usuario.
 ```
 spots
   id, zone_name, size (S/M/L), starting_price,
-  current_bid, current_leader_sponsor_id
+  current_bid, current_leader_sponsor_id, bid_count
 
 bids
   id, spot_id, sponsor_id, amount, deposit_paid (bool),
@@ -96,14 +96,18 @@ mostrada en el hero: $12,000 USD.
    con badges HTML anclados por zona: muestran el logo del sponsor líder si existe, o
    el precio actual. Solo vista/rotación (drag), no es una segunda vía para pujar —
    pujar sigue siendo a través de la tabla.
-4. Selector de zonas con puja en vivo por spot (estado: disponible / liderando / outbid),
-   modal animado (fade+scale) con desglose de depósito y upload opcional de logo
-   (Supabase Storage, bucket público `sponsor-logos`, subido vía server action con
-   service role — sin políticas RLS de escritura pública necesarias).
-5. "Cómo funciona" (3 pasos, patrón BrandMyMac).
-6. FAQ (pagos, qué pasa si te superan, aprobación de marca, por qué Lemon Squeezy).
-7. Muro de sponsors aprobados.
-8. Countdown a fin de subasta.
+4. Selector de zonas con puja en vivo por spot: columnas Zona / Líder (logo + nombre
+   del sponsor actual, o "—") / Oferta actual (+ cantidad de ofertas) / acción. Modal
+   animado (fade+scale) con desglose de depósito y upload opcional de logo (Supabase
+   Storage, bucket público `sponsor-logos`, subido vía server action con service
+   role — sin políticas RLS de escritura pública necesarias).
+5. Banner de confirmación post-pago: Lemon Squeezy redirige de vuelta al sitio
+   (`product_options.redirect_url`) a `/{locale}?bid=confirmed` en vez de dejar al
+   sponsor en la página de "my orders" de Lemon Squeezy.
+6. "Cómo funciona" (3 pasos, patrón BrandMyMac).
+7. FAQ (pagos, qué pasa si te superan, aprobación de marca, por qué Lemon Squeezy).
+8. Muro de sponsors aprobados.
+9. Countdown a fin de subasta.
 
 ## 7. Testing
 

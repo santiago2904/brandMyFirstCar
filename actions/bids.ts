@@ -12,6 +12,7 @@ export async function placeBid(input: {
   brandName: string
   amount: number
   logoUrl?: string
+  locale: string
 }): Promise<{ checkoutUrl: string } | { error: string }> {
   const supabase = createServerClient()
 
@@ -85,16 +86,26 @@ export async function placeBid(input: {
 
   const deposit = computeDeposit(input.amount)
 
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL
+  const redirectUrl = siteUrl
+    ? `${siteUrl}/${input.locale}?bid=confirmed`
+    : undefined
+
   const checkoutUrl = await createCheckoutUrl({
     variantId: CHECKOUT_VARIANT_ID,
     amountCents: Math.round(deposit * 100),
     email: input.sponsorEmail,
     custom: { bidId: bid.id, spotId: spot.id },
+    redirectUrl,
   })
 
   await supabase
     .from('spots')
-    .update({ current_bid: input.amount, current_leader_sponsor_id: sponsor.id })
+    .update({
+      current_bid: input.amount,
+      current_leader_sponsor_id: sponsor.id,
+      bid_count: spot.bid_count + 1,
+    })
     .eq('id', spot.id)
 
   return { checkoutUrl }

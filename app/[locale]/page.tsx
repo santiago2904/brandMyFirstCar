@@ -1,6 +1,8 @@
+import { Suspense } from 'react'
 import { createServerClient } from '@/lib/supabase/server'
 import { Nav } from '@/components/Nav'
 import { StatsBar } from '@/components/StatsBar'
+import { BidConfirmationBanner } from '@/components/BidConfirmationBanner'
 import { Hero } from '@/components/Hero'
 import { Countdown } from '@/components/Countdown'
 import { SpotSelector } from '@/components/SpotSelector'
@@ -29,6 +31,9 @@ export default async function Page() {
   return (
     <main>
       <Nav />
+      <Suspense fallback={null}>
+        <BidConfirmationBanner />
+      </Suspense>
       <StatsBar totalVisits={(totalVisits as number) ?? 0} />
       <div className="text-center pt-4">
         {campaign && <Countdown endDate={(campaign as Campaign).end_date} />}

@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import type { Spot } from '@/lib/types'
 import { computeDeposit, computeMinNextBid, computeRemainingBalance } from '@/lib/bidding'
 import { placeBid } from '@/actions/bids'
@@ -11,6 +11,7 @@ const TRANSITION_MS = 200
 
 export function SpotCard({ spot }: { spot: Spot }) {
   const t = useTranslations('spot')
+  const locale = useLocale()
   const [mounted, setMounted] = useState(false)
   const [open, setOpen] = useState(false)
   const [submitting, setSubmitting] = useState(false)
@@ -100,6 +101,7 @@ export function SpotCard({ spot }: { spot: Spot }) {
       brandName,
       amount,
       logoUrl,
+      locale,
     })
     if ('checkoutUrl' in result) {
       window.location.href = result.checkoutUrl
@@ -116,11 +118,35 @@ export function SpotCard({ spot }: { spot: Spot }) {
           <div className="font-medium">{spot.zone_name}</div>
           <div className="text-sm text-muted">{spot.size}</div>
         </td>
+        <td className="py-4 pr-4">
+          {spot.current_leader ? (
+            <div className="flex items-center gap-2">
+              {spot.current_leader.logo_url ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={spot.current_leader.logo_url}
+                  alt={spot.current_leader.brand_name}
+                  className="h-6 w-6 rounded-full object-cover"
+                />
+              ) : (
+                <span className="flex h-6 w-6 items-center justify-center rounded-full bg-gray-100 text-[10px] font-medium text-muted">
+                  {spot.current_leader.brand_name.slice(0, 1).toUpperCase()}
+                </span>
+              )}
+              <span className="text-sm">{spot.current_leader.brand_name}</span>
+            </div>
+          ) : (
+            <span className="text-sm text-muted">—</span>
+          )}
+        </td>
         <td className="py-4 pr-4 tabular-nums">
           <span className="text-xs text-muted">
             {spot.current_bid ? t('currentBid') : t('startingAt')}
           </span>
           <div className="font-medium">${spot.current_bid ?? spot.starting_price}</div>
+          {spot.bid_count > 0 && (
+            <div className="text-xs text-muted">{t('bidCount', { count: spot.bid_count })}</div>
+          )}
         </td>
         <td className="py-4 text-right">
           <button
@@ -135,7 +161,7 @@ export function SpotCard({ spot }: { spot: Spot }) {
 
       {mounted && (
         <tr>
-          <td colSpan={3} className="p-0">
+          <td colSpan={4} className="p-0">
             <div
               role="dialog"
               aria-modal="true"
