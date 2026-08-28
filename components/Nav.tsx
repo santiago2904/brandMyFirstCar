@@ -7,19 +7,22 @@ export function Nav() {
       <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
         <span className="font-semibold">{t('brand')}</span>
         <nav className="hidden gap-6 text-sm text-muted sm:flex">
-          <a href="#spots" className="hover:text-foreground">
+          <a href="#spots" className="transition-colors duration-200 hover:text-foreground">
             {t('spots')}
           </a>
-          <a href="#how-it-works" className="hover:text-foreground">
+          <a
+            href="#how-it-works"
+            className="transition-colors duration-200 hover:text-foreground"
+          >
             {t('howItWorks')}
           </a>
-          <a href="#faq" className="hover:text-foreground">
+          <a href="#faq" className="transition-colors duration-200 hover:text-foreground">
             {t('faq')}
           </a>
         </nav>
         <a
           href="#spots"
-          className="rounded-full bg-foreground px-4 py-2 text-sm font-medium text-background focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground"
+          className="rounded-full bg-foreground px-4 py-2 text-sm font-medium text-background transition-opacity duration-200 hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground"
         >
           {t('cta')}
         </a>

@@ -1,20 +1,55 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useTranslations } from 'next-intl'
 import type { Spot } from '@/lib/types'
-import { computeMinNextBid } from '@/lib/bidding'
+import { computeDeposit, computeMinNextBid, computeRemainingBalance } from '@/lib/bidding'
 import { placeBid } from '@/actions/bids'
+
+const TRANSITION_MS = 200
 
 export function SpotCard({ spot }: { spot: Spot }) {
   const t = useTranslations('spot')
-  const [expanded, setExpanded] = useState(false)
+  const [mounted, setMounted] = useState(false)
+  const [open, setOpen] = useState(false)
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [email, setEmail] = useState('')
   const [brandName, setBrandName] = useState('')
   const minNextBid = computeMinNextBid(spot.current_bid, spot.starting_price)
   const [amount, setAmount] = useState(minNextBid)
+  const triggerRef = useRef<HTMLButtonElement>(null)
+  const firstFieldRef = useRef<HTMLInputElement>(null)
+
+  const deposit = computeDeposit(amount)
+  const remaining = computeRemainingBalance(amount, deposit)
+
+  function openModal() {
+    setAmount(minNextBid)
+    setError(null)
+    setMounted(true)
+    // Mount first, then flip to open on the next frame so the transition runs.
+    requestAnimationFrame(() => setOpen(true))
+  }
+
+  function closeModal() {
+    setOpen(false)
+    window.setTimeout(() => setMounted(false), TRANSITION_MS)
+  }
+
+  useEffect(() => {
+    if (!mounted) return
+    firstFieldRef.current?.focus()
+    function onKeyDown(e: KeyboardEvent) {
+      if (e.key === 'Escape') closeModal()
+    }
+    document.addEventListener('keydown', onKeyDown)
+    document.body.style.overflow = 'hidden'
+    return () => {
+      document.removeEventListener('keydown', onKeyDown)
+      document.body.style.overflow = ''
+    }
+  }, [mounted])
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -49,62 +84,125 @@ export function SpotCard({ spot }: { spot: Spot }) {
         </td>
         <td className="py-4 text-right">
           <button
-            onClick={() => setExpanded((v) => !v)}
-            aria-expanded={expanded}
-            className="cursor-pointer rounded-full border border-foreground px-4 py-2 text-sm font-medium hover:bg-foreground hover:text-background focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground"
+            ref={triggerRef}
+            onClick={openModal}
+            className="cursor-pointer rounded-full border border-foreground px-4 py-2 text-sm font-medium transition-colors duration-200 hover:bg-foreground hover:text-background focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground"
           >
-            {expanded ? t('cancel') : t('bidButton')}
+            {t('bidButton')}
           </button>
         </td>
       </tr>
-      {expanded && (
-        <tr className="border-b border-border last:border-0">
-          <td colSpan={3} className="pb-4">
-            <form
-              onSubmit={handleSubmit}
-              className="flex flex-col gap-2 rounded-lg bg-background/50 p-4 sm:flex-row sm:items-center"
+
+      {mounted && (
+        <tr>
+          <td colSpan={3} className="p-0">
+            <div
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby={`bid-modal-title-${spot.id}`}
+              className={`fixed inset-0 z-20 flex items-center justify-center p-4 transition-opacity duration-200 motion-reduce:transition-none ${
+                open ? 'opacity-100' : 'opacity-0'
+              }`}
             >
-              <input
-                type="text"
-                placeholder={t('brandNamePlaceholder')}
-                aria-label={t('brandNamePlaceholder')}
-                required
-                autoComplete="organization"
-                value={brandName}
-                onChange={(e) => setBrandName(e.target.value)}
-                className="flex-1 rounded border border-border px-3 py-2 text-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground"
+              <div
+                className="absolute inset-0 bg-black/40 backdrop-blur-sm"
+                onClick={closeModal}
               />
-              <input
-                type="email"
-                placeholder={t('emailPlaceholder')}
-                aria-label={t('emailPlaceholder')}
-                required
-                autoComplete="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="flex-1 rounded border border-border px-3 py-2 text-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground"
-              />
-              <input
-                type="number"
-                min={minNextBid}
-                aria-label={t('currentBid')}
-                value={amount}
-                onChange={(e) => setAmount(Number(e.target.value))}
-                className="w-28 rounded border border-border px-3 py-2 text-sm tabular-nums focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground"
-              />
-              <button
-                type="submit"
-                disabled={submitting}
-                className="cursor-pointer rounded-full bg-foreground px-4 py-2 text-sm font-medium text-background disabled:cursor-not-allowed disabled:opacity-50"
+              <div
+                className={`relative w-full max-w-sm rounded-2xl border border-border bg-background p-6 shadow-xl transition-all duration-200 motion-reduce:transition-none ${
+                  open ? 'scale-100 opacity-100' : 'scale-95 opacity-0'
+                }`}
               >
-                {t('submitBid')}
-              </button>
-            </form>
-            {error && (
-              <p role="alert" className="mt-2 text-sm text-red-600">
-                {error}
-              </p>
-            )}
+                <button
+                  type="button"
+                  onClick={closeModal}
+                  aria-label={t('close')}
+                  className="absolute right-4 top-4 cursor-pointer text-muted transition-colors hover:text-foreground focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground"
+                >
+                  ✕
+                </button>
+
+                <h3 id={`bid-modal-title-${spot.id}`} className="pr-6 font-semibold">
+                  {spot.zone_name} · {spot.size}
+                </h3>
+                <p className="mt-1 text-sm text-muted">
+                  {spot.current_bid ? t('currentBid') : t('startingAt')}: $
+                  {spot.current_bid ?? spot.starting_price}
+                </p>
+
+                <form onSubmit={handleSubmit} className="mt-4 space-y-3">
+                  <div>
+                    <label
+                      htmlFor={`amount-${spot.id}`}
+                      className="text-xs font-medium text-muted"
+                    >
+                      {t('yourBid')}
+                    </label>
+                    <input
+                      id={`amount-${spot.id}`}
+                      type="number"
+                      min={minNextBid}
+                      value={amount}
+                      onChange={(e) => setAmount(Number(e.target.value))}
+                      className="mt-1 w-full rounded border border-border px-3 py-2 text-sm tabular-nums focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground"
+                    />
+                    <p className="mt-1 text-xs text-muted">
+                      {t('minimum', { amount: `$${minNextBid}` })}
+                    </p>
+                  </div>
+
+                  <div className="rounded-lg bg-gray-50 p-3 text-sm">
+                    <div className="flex justify-between text-muted">
+                      <span>{t('depositLabel')}</span>
+                      <span className="tabular-nums">${deposit.toFixed(0)}</span>
+                    </div>
+                    <div className="mt-1 flex justify-between font-medium">
+                      <span>{t('dueNow')}</span>
+                      <span className="tabular-nums">${deposit.toFixed(0)}</span>
+                    </div>
+                    <p className="mt-2 text-xs text-muted">
+                      {t('depositExplain', { remaining: `$${remaining.toFixed(0)}` })}
+                    </p>
+                  </div>
+
+                  <input
+                    ref={firstFieldRef}
+                    type="text"
+                    placeholder={t('brandNamePlaceholder')}
+                    aria-label={t('brandNamePlaceholder')}
+                    required
+                    autoComplete="organization"
+                    value={brandName}
+                    onChange={(e) => setBrandName(e.target.value)}
+                    className="w-full rounded border border-border px-3 py-2 text-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground"
+                  />
+                  <input
+                    type="email"
+                    placeholder={t('emailPlaceholder')}
+                    aria-label={t('emailPlaceholder')}
+                    required
+                    autoComplete="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="w-full rounded border border-border px-3 py-2 text-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground"
+                  />
+
+                  <button
+                    type="submit"
+                    disabled={submitting}
+                    className="w-full cursor-pointer rounded-full bg-foreground px-4 py-2.5 text-sm font-medium text-background transition-opacity duration-200 disabled:cursor-not-allowed disabled:opacity-50"
+                  >
+                    {t('submitBid', { amount: `$${amount}` })}
+                  </button>
+
+                  {error && (
+                    <p role="alert" className="text-sm text-red-600">
+                      {error}
+                    </p>
+                  )}
+                </form>
+              </div>
+            </div>
           </td>
         </tr>
       )}

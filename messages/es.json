@@ -57,8 +57,14 @@
     "startingAt": "Desde",
     "bidButton": "Ofertar",
     "cancel": "Cancelar",
+    "close": "Cerrar",
+    "yourBid": "Tu oferta",
+    "minimum": "Mínimo {amount}",
     "brandNamePlaceholder": "Nombre de tu marca",
     "emailPlaceholder": "Email",
-    "submitBid": "Confirmar oferta"
+    "depositLabel": "Depósito (20%)",
+    "dueNow": "A pagar ahora",
+    "depositExplain": "Se reembolsa completo si te superan. Si ganás, se cobra el saldo de {remaining} a la misma tarjeta al cerrar la subasta.",
+    "submitBid": "Confirmar oferta de {amount}"
   }
 }

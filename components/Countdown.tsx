@@ -14,9 +14,13 @@ function remaining(endDate: string) {
 
 export function Countdown({ endDate }: { endDate: string }) {
   const t = useTranslations('countdown')
-  const [time, setTime] = useState(() => remaining(endDate))
+  // Start null so server and first client render match exactly; the real
+  // value is computed client-side only, avoiding a Date.now() hydration
+  // mismatch between server render time and client hydration time.
+  const [time, setTime] = useState<ReturnType<typeof remaining> | null>(null)
 
   useEffect(() => {
+    setTime(remaining(endDate))
     const id = setInterval(() => setTime(remaining(endDate)), 1000)
     return () => clearInterval(id)
   }, [endDate])
@@ -26,7 +30,7 @@ export function Countdown({ endDate }: { endDate: string }) {
       <span className="h-1.5 w-1.5 rounded-full bg-accent" />
       <span className="text-muted">{t('endsIn')}</span>
       <span className="font-mono font-medium tabular-nums">
-        {time.days}d {time.hours}h {time.minutes}m {time.seconds}s
+        {time ? `${time.days}d ${time.hours}h ${time.minutes}m ${time.seconds}s` : '—'}
       </span>
     </div>
   )

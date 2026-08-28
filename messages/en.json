@@ -57,8 +57,14 @@
     "startingAt": "Starting at",
     "bidButton": "Place bid",
     "cancel": "Cancel",
+    "close": "Close",
+    "yourBid": "Your bid",
+    "minimum": "Minimum {amount}",
     "brandNamePlaceholder": "Your brand name",
     "emailPlaceholder": "Email",
-    "submitBid": "Confirm bid"
+    "depositLabel": "Deposit (20%)",
+    "dueNow": "Due now",
+    "depositExplain": "Refunded in full if you're outbid. If you win, the {remaining} remainder is charged to the same card when the auction closes.",
+    "submitBid": "Confirm bid of {amount}"
   }
 }

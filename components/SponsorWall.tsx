@@ -13,7 +13,7 @@ export function SponsorWall({ sponsors }: { sponsors: Sponsor[] }) {
             <a
               key={sponsor.id}
               href={sponsor.website ?? '#'}
-              className="flex items-center justify-center rounded-xl border border-border bg-background p-4"
+              className="flex items-center justify-center rounded-xl border border-border bg-background p-4 transition-transform duration-200 hover:-translate-y-0.5 hover:shadow-sm motion-reduce:hover:translate-y-0"
             >
               {sponsor.logo_url ? (
                 // eslint-disable-next-line @next/next/no-img-element
