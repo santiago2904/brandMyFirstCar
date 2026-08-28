@@ -10,6 +10,7 @@ export function SpotCard({ spot }: { spot: Spot }) {
   const t = useTranslations('spot')
   const [expanded, setExpanded] = useState(false)
   const [submitting, setSubmitting] = useState(false)
+  const [error, setError] = useState<string | null>(null)
   const [email, setEmail] = useState('')
   const [brandName, setBrandName] = useState('')
   const minNextBid = computeMinNextBid(spot.current_bid, spot.starting_price)
@@ -18,18 +19,19 @@ export function SpotCard({ spot }: { spot: Spot }) {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     setSubmitting(true)
+    setError(null)
     const result = await placeBid({
       spotId: spot.id,
       sponsorEmail: email,
       brandName,
       amount,
     })
-    setSubmitting(false)
     if ('checkoutUrl' in result) {
       window.location.href = result.checkoutUrl
-    } else {
-      alert(result.error)
+      return
     }
+    setSubmitting(false)
+    setError(result.error)
   }
 
   return (
@@ -43,12 +45,13 @@ export function SpotCard({ spot }: { spot: Spot }) {
           <span className="text-xs text-muted">
             {spot.current_bid ? t('currentBid') : t('startingAt')}
           </span>
-          <div className="font-medium">€{spot.current_bid ?? spot.starting_price}</div>
+          <div className="font-medium">${spot.current_bid ?? spot.starting_price}</div>
         </td>
         <td className="py-4 text-right">
           <button
             onClick={() => setExpanded((v) => !v)}
-            className="rounded-full border border-foreground px-4 py-2 text-sm font-medium hover:bg-foreground hover:text-background"
+            aria-expanded={expanded}
+            className="cursor-pointer rounded-full border border-foreground px-4 py-2 text-sm font-medium hover:bg-foreground hover:text-background focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground"
           >
             {expanded ? t('cancel') : t('bidButton')}
           </button>
@@ -64,34 +67,44 @@ export function SpotCard({ spot }: { spot: Spot }) {
               <input
                 type="text"
                 placeholder={t('brandNamePlaceholder')}
+                aria-label={t('brandNamePlaceholder')}
                 required
+                autoComplete="organization"
                 value={brandName}
                 onChange={(e) => setBrandName(e.target.value)}
-                className="flex-1 rounded border border-border px-3 py-2 text-sm"
+                className="flex-1 rounded border border-border px-3 py-2 text-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground"
               />
               <input
                 type="email"
                 placeholder={t('emailPlaceholder')}
+                aria-label={t('emailPlaceholder')}
                 required
+                autoComplete="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="flex-1 rounded border border-border px-3 py-2 text-sm"
+                className="flex-1 rounded border border-border px-3 py-2 text-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground"
               />
               <input
                 type="number"
                 min={minNextBid}
+                aria-label={t('currentBid')}
                 value={amount}
                 onChange={(e) => setAmount(Number(e.target.value))}
-                className="w-28 rounded border border-border px-3 py-2 text-sm tabular-nums"
+                className="w-28 rounded border border-border px-3 py-2 text-sm tabular-nums focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground"
               />
               <button
                 type="submit"
                 disabled={submitting}
-                className="rounded-full bg-foreground px-4 py-2 text-sm font-medium text-background disabled:opacity-50"
+                className="cursor-pointer rounded-full bg-foreground px-4 py-2 text-sm font-medium text-background disabled:cursor-not-allowed disabled:opacity-50"
               >
                 {t('submitBid')}
               </button>
             </form>
+            {error && (
+              <p role="alert" className="mt-2 text-sm text-red-600">
+                {error}
+              </p>
+            )}
           </td>
         </tr>
       )}

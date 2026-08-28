@@ -10,7 +10,12 @@
     "eyebrow": "Subasta en vivo · 1 semana",
     "title": "Tu marca, en mi primer carro.",
     "subtitle": "Tu logo viaja conmigo durante 6 meses. Elegí tu espacio, hacé tu oferta.",
-    "spotsClaimed": "espacios con ofertas"
+    "raisedOf": "recaudado de la meta de {goal}",
+    "funded": "{pct}% financiado"
+  },
+  "stats": {
+    "viewingNow": "personas viendo esta página ahora",
+    "totalVisits": "visitas totales"
   },
   "howItWorks": {
     "title": "Cómo funciona",
@@ -33,9 +38,9 @@
   "faq": {
     "title": "Preguntas frecuentes",
     "paymentQ": "¿Cómo funciona el pago?",
-    "paymentA": "Al pujar se cobra un depósito del 20% (mínimo el equivalente a €10). Si te superan, se reembolsa automático. Si ganás, cuenta para el total y te mando el link del saldo.",
+    "paymentA": "Al pujar se cobra un depósito del 20% (mínimo $10). Si te superan, se reembolsa automático. Si ganás, cuenta para el total y te mando el link del saldo.",
     "outbidQ": "¿Qué pasa si me superan?",
-    "outbidA": "Recibís el reembolso completo y podés volver a pujar. La nueva oferta debe superar la actual por al menos €10.",
+    "outbidA": "Recibís el reembolso completo y podés volver a pujar. La nueva oferta debe superar la actual por al menos $10.",
     "approvalQ": "¿Cualquier marca puede participar?",
     "approvalA": "Reviso cada sponsor a mano antes de que aparezca. Si tu oferta no se aprueba, el depósito se devuelve completo."
   },

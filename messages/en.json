@@ -10,7 +10,12 @@
     "eyebrow": "Live auction · 1 week",
     "title": "Your brand, on my first car.",
     "subtitle": "Your logo rides with me for 6 months. Pick your spot, place your bid.",
-    "spotsClaimed": "spots with bids"
+    "raisedOf": "raised of the {goal} goal",
+    "funded": "{pct}% funded"
+  },
+  "stats": {
+    "viewingNow": "people viewing this page now",
+    "totalVisits": "total visits"
   },
   "howItWorks": {
     "title": "How it works",
@@ -33,9 +38,9 @@
   "faq": {
     "title": "Questions & Answers",
     "paymentQ": "How does payment work?",
-    "paymentA": "Bidding takes a 20% deposit (minimum equivalent to €10). If you're outbid, it's refunded automatically. If you win, it counts toward the total and I send a payment link for the remainder.",
+    "paymentA": "Bidding takes a 20% deposit (minimum $10). If you're outbid, it's refunded automatically. If you win, it counts toward the total and I send a payment link for the remainder.",
     "outbidQ": "What if someone outbids me?",
-    "outbidA": "You get a full refund and the chance to swing back. A new bid must beat the current one by at least €10.",
+    "outbidA": "You get a full refund and the chance to swing back. A new bid must beat the current one by at least $10.",
     "approvalQ": "Can any brand join?",
     "approvalA": "I approve every sponsor by hand before it appears. If your bid is refused, your deposit comes back in full."
   },

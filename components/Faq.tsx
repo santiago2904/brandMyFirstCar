@@ -24,7 +24,8 @@ export function Faq() {
                 <dt>
                   <button
                     onClick={() => setOpenIndex(open ? null : i)}
-                    className="flex w-full items-center justify-between py-4 text-left font-medium"
+                    aria-expanded={open}
+                    className="flex w-full cursor-pointer items-center justify-between py-4 text-left font-medium focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground"
                   >
                     {item.q}
                     <span className="text-muted">{open ? '−' : '+'}</span>

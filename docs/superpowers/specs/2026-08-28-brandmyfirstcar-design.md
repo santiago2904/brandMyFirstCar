@@ -14,7 +14,7 @@ en fotos/redes del usuario.
 
 **Incluido:**
 - Landing pública multi-idioma (ES/EN) con selector de zonas del carro y puja en vivo.
-- Subasta real: depósito del 20% (mín. equivalente a €10) al pujar, cobrado vía
+- Subasta real: depósito del 20% (mín. $10 USD) al pujar, cobrado vía
   Lemon Squeezy (Merchant of Record — necesario porque Stripe no admite comercios en
   Colombia).
 - Refund automático (vía API de Lemon Squeezy) cuando a alguien lo superan en la puja.
@@ -43,7 +43,7 @@ en fotos/redes del usuario.
   - **Nota técnica**: Lemon Squeezy no soporta authorization holds diferidos como Stripe.
     El depósito se cobra completo al pujar; si superan la puja, se dispara un **refund
     real** vía su API (no liberación de hold). Funcionalmente igual para el sponsor.
-- **Server Actions / Route Handlers**: crear puja, validar incremento mínimo (+€10 sobre
+- **Server Actions / Route Handlers**: crear puja, validar incremento mínimo (+$10 sobre
   la actual), disparar refund al líder anterior, disparar checkout del saldo al ganador
   al cerrar la subasta.
 - **Webhooks**: Lemon Squeezy → Route Handler que confirma pago de depósito y actualiza
@@ -66,29 +66,37 @@ sponsors
 campaign
   start_date, end_date (auction, 1 semana),
   sponsor_exposure_months (6)
+
+site_stats
+  id (=1), total_visits (bigint, incrementado vía función RPC increment_visits()
+  en cada carga de página — contador simple sin deduplicación de bots/refreshes)
 ```
 
 ## 5. Zonas del carro (placeholders — ajustar con datos reales antes de lanzar)
 
 | Zona | Tamaño | Precio de arranque |
 |---|---|---|
-| Capó | L | €300 |
-| Puerta izquierda | L | €300 |
-| Puerta derecha | L | €300 |
-| Baúl / trunk | M | €180 |
-| Parachoques trasero | M | €180 |
-| Espejos/detalle (opcional) | S | €90 |
+| Capó | L | $100 |
+| Puerta izquierda | L | $100 |
+| Puerta derecha | L | $100 |
+| Baúl / trunk | M | $40 |
+| Parachoques trasero | M | $40 |
+| Espejos/detalle (opcional) | S | $10 |
 
-Incremento mínimo de puja: +€10 sobre la puja actual.
+Incremento mínimo de puja: +$10 sobre la puja actual. Meta de financiamiento total
+mostrada en el hero: $12,000 USD.
 
 ## 6. Páginas / secciones
 
-1. Hero: foto del carro + historia corta ("por qué este carro importa").
-2. Selector de zonas con puja en vivo por spot (estado: disponible / liderando / outbid).
-3. "Cómo funciona" (3 pasos, patrón BrandMyMac).
-4. FAQ (pagos, qué pasa si te superan, aprobación de marca, por qué Lemon Squeezy).
-5. Muro de sponsors aprobados.
-6. Countdown a fin de subasta.
+1. Nav fija + stats bar (visitas totales acumuladas + gente viendo la página ahora,
+   vía Supabase Realtime Presence — efímero, no persistido).
+2. Hero: foto del carro + historia corta ("por qué este carro importa") + barra de
+   progreso de financiamiento ($ ofertado hasta ahora / meta de $12,000 USD).
+3. Selector de zonas con puja en vivo por spot (estado: disponible / liderando / outbid).
+4. "Cómo funciona" (3 pasos, patrón BrandMyMac).
+5. FAQ (pagos, qué pasa si te superan, aprobación de marca, por qué Lemon Squeezy).
+6. Muro de sponsors aprobados.
+7. Countdown a fin de subasta.
 
 ## 7. Testing
 

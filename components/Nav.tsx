@@ -19,7 +19,7 @@ export function Nav() {
         </nav>
         <a
           href="#spots"
-          className="rounded-full bg-foreground px-4 py-2 text-sm font-medium text-background"
+          className="rounded-full bg-foreground px-4 py-2 text-sm font-medium text-background focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground"
         >
           {t('cta')}
         </a>

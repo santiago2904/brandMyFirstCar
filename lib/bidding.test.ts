@@ -11,7 +11,7 @@ describe('computeDeposit', () => {
     expect(computeDeposit(1000)).toBe(200)
   })
 
-  it('floors at the €10 minimum', () => {
+  it('floors at the $10 minimum', () => {
     expect(computeDeposit(30)).toBe(10)
   })
 })
@@ -21,7 +21,7 @@ describe('computeMinNextBid', () => {
     expect(computeMinNextBid(null, 300)).toBe(300)
   })
 
-  it('is current bid + €10 when there is a current bid', () => {
+  it('is current bid + $10 when there is a current bid', () => {
     expect(computeMinNextBid(450, 300)).toBe(460)
   })
 })
@@ -34,7 +34,7 @@ describe('validateBid', () => {
     })
   })
 
-  it('rejects a bid that does not beat the current bid by at least €10', () => {
+  it('rejects a bid that does not beat the current bid by at least $10', () => {
     expect(validateBid(455, 450, 300)).toEqual({
       valid: false,
       reason: 'below_minimum',

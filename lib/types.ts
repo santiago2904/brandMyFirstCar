@@ -35,3 +35,7 @@ export interface Campaign {
   end_date: string
   sponsor_exposure_months: number
 }
+
+export interface SiteStats {
+  total_visits: number
+}
