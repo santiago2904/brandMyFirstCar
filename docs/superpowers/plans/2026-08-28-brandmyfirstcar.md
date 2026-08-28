@@ -187,6 +187,15 @@ git commit -m "chore: scaffold Next.js + Tailwind + Vitest project"
     "approvalQ": "¿Cualquier marca puede participar?",
     "approvalA": "Reviso cada sponsor a mano antes de que aparezca. Si tu oferta no se aprueba, el depósito se devuelve completo."
   },
+  "benefits": {
+    "title": "Qué más te llevás",
+    "devTitle": "Trabajo de software",
+    "devBody": "Soy desarrollador de software. Parte de lo que aportás se traduce en trabajo para tu marca: una web, una app, una automatización o un bot, a definir según el monto.",
+    "contentTitle": "Contenido en redes",
+    "contentBody": "Voy a grabar mucho contenido del carro para redes — tu marca aparece brandeada de forma orgánica en ese contenido.",
+    "callTitle": "Videollamada del carro",
+    "callBody": "Cuando tenga el carro, te muestro tu sticker en vivo por FaceTime si querés verlo."
+  },
   "sponsorWall": {
     "title": "Las marcas que vienen conmigo",
     "empty": "Tu marca podría estar acá"
@@ -228,6 +237,15 @@ git commit -m "chore: scaffold Next.js + Tailwind + Vitest project"
     "outbidA": "You get a full refund and the chance to swing back. A new bid must beat the current one by at least €10.",
     "approvalQ": "Can any brand join?",
     "approvalA": "I approve every sponsor by hand before it appears. If your bid is refused, your deposit comes back in full."
+  },
+  "benefits": {
+    "title": "What else you get",
+    "devTitle": "Software work",
+    "devBody": "I'm a software developer. Part of what you contribute translates into work for your brand: a website, an app, an automation, or a bot, scoped to the amount.",
+    "contentTitle": "Social content",
+    "contentBody": "I'll be filming a lot of car content for social — your brand shows up branded, organically, in that content.",
+    "callTitle": "Car video call",
+    "callBody": "Once I have the car, I'll show you your sticker live over FaceTime if you'd like to see it."
   },
   "sponsorWall": {
     "title": "The brands coming along",
@@ -1251,15 +1269,16 @@ git commit -m "feat: add SpotSelector with live bidding and realtime updates"
 
 ---
 
-## Task 10: How It Works, FAQ, Sponsor Wall
+## Task 10: How It Works, Benefits, FAQ, Sponsor Wall
 
 **Files:**
-- Create: `components/HowItWorks.tsx`, `components/Faq.tsx`, `components/SponsorWall.tsx`
+- Create: `components/HowItWorks.tsx`, `components/Benefits.tsx`, `components/Faq.tsx`,
+  `components/SponsorWall.tsx`
 
 **Interfaces:**
 - Consumes: `useTranslations` from `next-intl`, `Sponsor` type from `lib/types.ts`.
-- Produces: `<HowItWorks />`, `<Faq />`, `<SponsorWall sponsors={Sponsor[]} />` — used
-  by `app/[locale]/page.tsx` (Task 11).
+- Produces: `<HowItWorks />`, `<Benefits />`, `<Faq />`,
+  `<SponsorWall sponsors={Sponsor[]} />` — used by `app/[locale]/page.tsx` (Task 11).
 
 - [ ] **Step 1: Implement HowItWorks**
 
@@ -1320,7 +1339,36 @@ export function Faq() {
 }
 ```
 
-- [ ] **Step 3: Implement SponsorWall**
+- [ ] **Step 3: Implement Benefits**
+
+`components/Benefits.tsx`:
+```tsx
+import { useTranslations } from 'next-intl'
+
+export function Benefits() {
+  const t = useTranslations('benefits')
+  const items = [
+    { title: t('devTitle'), body: t('devBody') },
+    { title: t('contentTitle'), body: t('contentBody') },
+    { title: t('callTitle'), body: t('callBody') },
+  ]
+  return (
+    <section className="px-6 py-12">
+      <h2 className="text-2xl font-bold">{t('title')}</h2>
+      <div className="mt-6 grid gap-6 sm:grid-cols-3">
+        {items.map((item, i) => (
+          <div key={i} className="rounded-lg border p-4">
+            <h3 className="font-semibold">{item.title}</h3>
+            <p className="text-sm text-gray-600">{item.body}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+  )
+}
+```
+
+- [ ] **Step 4: Implement SponsorWall**
 
 `components/SponsorWall.tsx`:
 ```tsx
@@ -1354,11 +1402,11 @@ export function SponsorWall({ sponsors }: { sponsors: Sponsor[] }) {
 }
 ```
 
-- [ ] **Step 4: Commit**
+- [ ] **Step 5: Commit**
 
 ```bash
-git add components/HowItWorks.tsx components/Faq.tsx components/SponsorWall.tsx
-git commit -m "feat: add HowItWorks, Faq, and SponsorWall components"
+git add components/HowItWorks.tsx components/Benefits.tsx components/Faq.tsx components/SponsorWall.tsx
+git commit -m "feat: add HowItWorks, Benefits, Faq, and SponsorWall components"
 ```
 
 ---
@@ -1370,8 +1418,8 @@ git commit -m "feat: add HowItWorks, Faq, and SponsorWall components"
 
 **Interfaces:**
 - Consumes: `Hero`, `Countdown` (Task 8); `SpotSelector` (Task 9); `HowItWorks`,
-  `Faq`, `SponsorWall` (Task 10); `createServerClient` from `lib/supabase/server.ts`;
-  `Spot`, `Sponsor`, `Campaign` types from `lib/types.ts`.
+  `Benefits`, `Faq`, `SponsorWall` (Task 10); `createServerClient` from
+  `lib/supabase/server.ts`; `Spot`, `Sponsor`, `Campaign` types from `lib/types.ts`.
 
 - [ ] **Step 1: Fetch data and assemble sections**
 
@@ -1382,6 +1430,7 @@ import { Hero } from '@/components/Hero'
 import { Countdown } from '@/components/Countdown'
 import { SpotSelector } from '@/components/SpotSelector'
 import { HowItWorks } from '@/components/HowItWorks'
+import { Benefits } from '@/components/Benefits'
 import { Faq } from '@/components/Faq'
 import { SponsorWall } from '@/components/SponsorWall'
 import type { Spot, Sponsor, Campaign } from '@/lib/types'
@@ -1401,6 +1450,7 @@ export default async function Page() {
       {campaign && <Countdown endDate={(campaign as Campaign).end_date} />}
       <SpotSelector initialSpots={(spots as Spot[]) ?? []} />
       <HowItWorks />
+      <Benefits />
       <Faq />
       <SponsorWall sponsors={(sponsors as Sponsor[]) ?? []} />
     </main>

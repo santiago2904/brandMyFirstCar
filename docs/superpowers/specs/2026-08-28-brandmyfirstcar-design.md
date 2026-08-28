@@ -22,6 +22,10 @@ en fotos/redes del usuario.
 - Muro de sponsors aprobados (logo + link), con aprobación manual del usuario.
 - FAQ + "cómo funciona" (calcado del patrón de las referencias).
 - Countdown a fin de subasta.
+- Sección "Qué más te llevás" con 3 beneficios extra (no automatizables, solo copy):
+  1. Trabajo de software dev atribuible al monto pagado (web, app, automatización o bot).
+  2. Contenido en redes sociales del carro (el auto brandeado se ve orgánicamente).
+  3. Videollamada por FaceTime para mostrar el carro cuando lo tenga (opcional, a pedido del sponsor).
 
 **Fuera de alcance v1 (YAGNI):**
 - Panel de admin con UI — aprobación de sponsors se hace directo en Supabase.
