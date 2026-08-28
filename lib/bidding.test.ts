@@ -11,8 +11,8 @@ describe('computeDeposit', () => {
     expect(computeDeposit(1000)).toBe(200)
   })
 
-  it('floors at the $10 minimum', () => {
-    expect(computeDeposit(30)).toBe(10)
+  it('floors at the $2 minimum', () => {
+    expect(computeDeposit(5)).toBe(2)
   })
 })
 

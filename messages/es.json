@@ -42,7 +42,7 @@
   "faq": {
     "title": "Preguntas frecuentes",
     "paymentQ": "¿Cómo funciona el pago?",
-    "paymentA": "Al pujar se cobra un depósito del 20% (mínimo $10). Si te superan, se reembolsa automático. Si ganás, cuenta para el total y te mando el link del saldo.",
+    "paymentA": "Al pujar se cobra un depósito del 20% (mínimo $2). Si te superan, se reembolsa automático. Si ganás, cuenta para el total y te mando el link del saldo.",
     "outbidQ": "¿Qué pasa si me superan?",
     "outbidA": "Recibís el reembolso completo y podés volver a pujar. La nueva oferta debe superar la actual por al menos $10.",
     "approvalQ": "¿Cualquier marca puede participar?",

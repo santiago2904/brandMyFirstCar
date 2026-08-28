@@ -42,7 +42,7 @@
   "faq": {
     "title": "Questions & Answers",
     "paymentQ": "How does payment work?",
-    "paymentA": "Bidding takes a 20% deposit (minimum $10). If you're outbid, it's refunded automatically. If you win, it counts toward the total and I send a payment link for the remainder.",
+    "paymentA": "Bidding takes a 20% deposit (minimum $2). If you're outbid, it's refunded automatically. If you win, it counts toward the total and I send a payment link for the remainder.",
     "outbidQ": "What if someone outbids me?",
     "outbidA": "You get a full refund and the chance to swing back. A new bid must beat the current one by at least $10.",
     "approvalQ": "Can any brand join?",

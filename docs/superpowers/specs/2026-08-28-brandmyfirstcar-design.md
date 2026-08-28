@@ -14,7 +14,9 @@ en fotos/redes del usuario.
 
 **Incluido:**
 - Landing pública multi-idioma (ES/EN) con selector de zonas del carro y puja en vivo.
-- Subasta real: depósito del 20% (mín. $10 USD) al pujar, cobrado vía
+- Subasta real: depósito del 20% (mín. $2 USD — bajado desde $10 al reprecificar las
+  zonas en USD, para que el piso no se comiera el 20% real en las ofertas chicas) al
+  pujar, cobrado vía
   Lemon Squeezy (Merchant of Record — necesario porque Stripe no admite comercios en
   Colombia).
 - Refund automático (vía API de Lemon Squeezy) cuando a alguien lo superan en la puja.

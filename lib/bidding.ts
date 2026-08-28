@@ -1,5 +1,5 @@
 const MIN_INCREMENT = 10
-const MIN_DEPOSIT = 10
+const MIN_DEPOSIT = 2
 const DEPOSIT_RATE = 0.2
 
 export function computeDeposit(bidAmount: number): number {
